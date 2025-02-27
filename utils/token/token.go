@@ -2,7 +2,7 @@ package token
 
 import (
 	mError "ganxue-server/utils/error"
-	"github.com/dgrijalva/jwt-go"
+	"github.com/golang-jwt/jwt/v5"
 	"os"
 	"time"
 )
