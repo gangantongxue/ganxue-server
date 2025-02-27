@@ -2,27 +2,50 @@ package mysql
 
 import (
 	"errors"
+	"fmt"
 	"ganxue-server/global"
 	"ganxue-server/model/user_model"
 	"ganxue-server/utils/error"
-	"ganxue-server/utils/log"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
+	"log"
+	"os"
 	"time"
 )
 
 func Init() {
 	// 初始化数据库
 	if err := InitDB(); err != nil {
-		log.Panic(err)
+		fmt.Println("mysql init error", err)
+		os.Exit(1)
 	}
 }
 
 // InitDB 初始化数据库
 func InitDB() *error.Error {
-	dsn := global.CONFIG.Mysql.User + ":" + global.CONFIG.Mysql.Password + "@tcp(" + global.CONFIG.Mysql.Host + ":" + global.CONFIG.Mysql.Port + ")/" + global.CONFIG.Mysql.Database + "?charset=utf8mb4&parseTime=True&loc=Local"
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
+		global.CONFIG.Mysql.User,
+		global.CONFIG.Mysql.Password,
+		global.CONFIG.Mysql.Host,
+		global.CONFIG.Mysql.Port,
+		global.CONFIG.Mysql.Database,
+	)
+
+	gormLogger := logger.New(
+		log.New(os.Stdout, "\r\n", log.LstdFlags),
+		logger.Config{
+			SlowThreshold:             time.Second, // 慢 SQL 阈值
+			LogLevel:                  logger.Warn, // 日志级别
+			IgnoreRecordNotFoundError: true,        // 忽略ErrRecordNotFound（记录未找到）错误
+			Colorful:                  true,        // 禁用彩色打印
+		},
+	)
+
 	// 连接数据库
-	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
+		Logger: gormLogger,
+	})
 	if err != nil {
 		return error.New(error.DBConnectError, err, "连接数据库失败")
 	}

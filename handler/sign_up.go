@@ -72,7 +72,7 @@ func SignUp() app.HandlerFunc {
 		}
 
 		// 创建用户
-		if err := mysql.Create(&user); err != nil {
+		if err := mysql.Create(&user.User); err != nil {
 			log.Error(err)
 			ctx.String(500, "服务器错误")
 			return

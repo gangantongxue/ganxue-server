@@ -5,12 +5,12 @@ mysql:
   port: 3306
   database: ganxue_server
 redis:
-  addr: 172.21.126.176:6379
+  addr: 127.0.0.1:6379
   password: ""
   db: 0
 email:
-  from: ""
+  from: "MC18291255035@163.com"
   host: smtp.163.com
   port: 465
-  username: ""
-  password: ""
+  username: "MC18291255035@163.com"
+  password: "GBqmWW3z7yJHGNxL"

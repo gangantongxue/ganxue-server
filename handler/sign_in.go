@@ -54,15 +54,15 @@ func SignIn() app.HandlerFunc {
 				LongToken  string `json:"long_token"`
 			} `json:"data"`
 		}{
-			Message: "注册成功",
+			Message: "登录成功",
 			Data: struct {
 				Email      string `json:"email"`
 				UserName   string `json:"user_name"`
 				ShortToken string `json:"short_token"`
 				LongToken  string `json:"long_token"`
 			}{
-				Email:      user.Email,
-				UserName:   user.UserName,
+				Email:      _user.Email,
+				UserName:   _user.UserName,
 				ShortToken: shortToken,
 				LongToken:  longToken,
 			},

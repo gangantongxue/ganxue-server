@@ -2,8 +2,12 @@ package ver_code
 
 import (
 	"bytes"
+	"errors"
+	"fmt"
 	"ganxue-server/global"
 	"ganxue-server/utils/error"
+	"ganxue-server/utils/log"
+	"github.com/go-redis/redis/v8"
 	"gopkg.in/mail.v2"
 	"math/rand"
 	"os"
@@ -72,10 +76,24 @@ func sendVerCode(email string, verCode string) *error.Error {
 
 // Verify 验证验证码
 func Verify(email string, verCode string) bool {
-	val, err := global.RDB.GetDel(global.CTX, email).Result()
-	if err != nil {
+	val, err := global.RDB.Get(global.CTX, email).Result()
+	if errors.Is(err, redis.Nil) {
+		log.Error("验证码不存在或已过期")
+		return false
+	} else if err != nil {
+		log.Error(err)
 		return false
 	}
 
-	return val == verCode
+	fmt.Println(val)
+
+	if val != verCode {
+		return false
+	}
+
+	if err := global.RDB.Del(global.CTX, email).Err(); err != nil {
+		log.Error(err)
+		return false
+	}
+	return true
 }

@@ -2,11 +2,14 @@ package log
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"ganxue-server/global"
+	"github.com/go-redis/redis/v8"
 	"gopkg.in/mail.v2"
 	"os"
 	"path/filepath"
+	"regexp"
 )
 
 func processLog() {
@@ -30,34 +33,42 @@ func processLog() {
 		signal := <-Signal
 		// 从redis中获取日志
 		log, err := global.RDB.LPop(context.Background(), logKey[signal]).Result()
-		if err != nil {
+		if errors.Is(err, redis.Nil) {
+			fmt.Println("Redis 列表为空或键不存在:", logKey[signal])
+			continue
+		} else if err != nil {
+			fmt.Println("redis获取日志失败:", err)
 			return
 		}
+
 		switch signal {
 		case DebugKey:
-			fmt.Println("[debug]", log)
+			fmt.Println(Green+"[debug]"+Reset, log)
 		case WarnKey:
-			fmt.Println("[warn]", log)
+			fmt.Println(Yellow+"[warn]"+Reset, log)
 		case ErrorKey:
-			fmt.Println("[error]", log)
-			sendEmail("[error] " + log)
-			_, err := logFile.WriteString("[error] " + log + "\n")
+			fmt.Println(Red+"[error]"+Reset, log)
+			_log := removeANSIEscapeCodes(log)
+			sendEmail("[error] " + _log)
+			_, err := logFile.WriteString("[error] " + _log + "\n")
 			if err != nil {
 				return
 			}
 		case PanicKey:
-			sendEmail("[panic] " + log)
-			_, err := logFile.WriteString("[panic] " + log + "\n")
+			_log := removeANSIEscapeCodes(log)
+			sendEmail("[panic] " + _log)
+			_, err := logFile.WriteString("[panic] " + _log + "\n")
 			if err != nil {
 				return
 			}
 			panic("[panic] " + log)
 		case FatalKey:
 			fmt.Println(log)
+			_log := removeANSIEscapeCodes(log)
 			sendEmail("[fatal] " + log)
-			_, err := logFile.WriteString("[fatal] " + log + "\n")
+			_, err := logFile.WriteString("[fatal] " + _log + "\n")
 			if err != nil {
-				return
+				fmt.Println("写入日志失败", err)
 			}
 			os.Exit(1)
 		}
@@ -75,4 +86,11 @@ func sendEmail(log string) {
 	if err := d.DialAndSend(m); err != nil {
 		fmt.Println("发送邮件失败：", err)
 	}
+}
+
+// removeANSIEscapeCodes 去除 ANSI 转义码
+func removeANSIEscapeCodes(s string) string {
+	ansiEscape := `[\x1b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><~]`
+	re := regexp.MustCompile(ansiEscape)
+	return re.ReplaceAllString(s, "")
 }

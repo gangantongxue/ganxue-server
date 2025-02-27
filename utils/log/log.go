@@ -12,7 +12,7 @@ import (
 )
 
 var ctx = context.Background()
-var Signal = make(chan uint8, 5)
+var Signal = make(chan uint8, 100)
 
 const (
 	DebugKey uint8 = 0
@@ -30,6 +30,14 @@ var logKey = map[uint8]string{
 	FatalKey: "fatal",
 }
 
+const (
+	Reset  = "\033[0m"
+	Green  = "\033[32m"
+	Yellow = "\033[33m"
+	Red    = "\033[31m"
+	Blue   = "\033[34m"
+)
+
 func Init() {
 	go processLog()
 }
@@ -38,7 +46,7 @@ func Init() {
 func Parse(v []interface{}) string {
 	var str string
 	now := time.Now().Format("2006-01-02 15:04:05")
-	str += now + " "
+	str += Blue + now + Reset + " "
 	for _, v := range v {
 		switch v.(type) {
 		case string:
@@ -76,7 +84,6 @@ func Warn(v ...interface{}) {
 // Error 失败日志
 func Error(v ...interface{}) {
 	str := Parse(v)
-	fmt.Println("test", str)
 	global.RDB.RPush(ctx, "error", str)
 	Signal <- ErrorKey
 }

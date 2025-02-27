@@ -1,9 +1,10 @@
 package redis
 
 import (
+	"fmt"
 	"ganxue-server/global"
-	"ganxue-server/utils/log"
 	"github.com/go-redis/redis/v8"
+	"os"
 )
 
 func Init() {
@@ -14,5 +15,9 @@ func Init() {
 	})
 	// 测试连接
 	str, _err := global.RDB.Ping(global.CTX).Result()
-	log.Fatal(_err, "连接Redis失败", str)
+	if _err != nil {
+		fmt.Println("redis连接失败", str, _err)
+		os.Exit(1)
+	}
+
 }
