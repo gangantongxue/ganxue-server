@@ -12,17 +12,6 @@ import (
 )
 
 // SignUp 创建用户
-// OpenAPI
-// @Summary 创建用户
-// @Description 创建用户
-// @Tags 用户
-// @Accept json
-// @Produce json
-// @Param user body user_model.User true "用户信息"
-// @Success 200 {object} user_model.User
-// @Failure 400 {object} error.Error
-// @Failure 500 {object} error.Error
-// @Router /log-up [post]
 func SignUp() app.HandlerFunc {
 	return func(c context.Context, ctx *app.RequestContext) {
 		user := struct {
@@ -31,19 +20,19 @@ func SignUp() app.HandlerFunc {
 		}{}
 		// 解析请求体
 		if err := ctx.Bind(&user); err != nil {
-			ctx.String(400, "请求错误")
+			ctx.JSON(400, map[string]string{"message": "解析请求体失败"})
 			return
 		}
 		// 验证验证码
 		if !ver_code.Verify(user.Email, user.VerCode) {
-			ctx.String(400, "验证码错误")
+			ctx.JSON(400, map[string]string{"message": "验证码错误"})
 			return
 		}
 		// 查找用户
 		_user, err := mysql.FindUserByEmail(user.Email)
 		// 用户已存在
 		if err == nil {
-			ctx.JSON(400, struct {
+			ctx.JSON(409, struct {
 				Message string `json:"message"`
 				Data    struct {
 					Email    string `json:"email"`
@@ -65,7 +54,7 @@ func SignUp() app.HandlerFunc {
 		// 密码加密
 		if pwd, err := password.EncryptPassword(user.Password); err != nil {
 			log.Error(err)
-			ctx.String(500, "服务器错误")
+			ctx.JSON(500, map[string]string{"message": "服务器错误"})
 			return
 		} else {
 			user.Password = pwd
@@ -74,7 +63,7 @@ func SignUp() app.HandlerFunc {
 		// 创建用户
 		if err := mysql.Create(&user.User); err != nil {
 			log.Error(err)
-			ctx.String(500, "服务器错误")
+			ctx.JSON(500, map[string]string{"message": "服务器错误"})
 			return
 		}
 
@@ -82,12 +71,12 @@ func SignUp() app.HandlerFunc {
 		var shortToken, longToken string
 		if shortToken, err = token.GenerateShortToken(user.ID); err != nil {
 			log.Error(err)
-			ctx.String(500, "服务器错误")
+			ctx.JSON(500, map[string]string{"message": "服务器错误"})
 			return
 		}
 		if longToken, err = token.GenerateLongToken(user.ID); err != nil {
 			log.Error(err)
-			ctx.String(500, "服务器错误")
+			ctx.JSON(500, map[string]string{"message": "服务器错误"})
 			return
 		}
 		ctx.JSON(200, struct {

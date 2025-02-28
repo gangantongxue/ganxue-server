@@ -3,7 +3,6 @@ package ver_code
 import (
 	"bytes"
 	"errors"
-	"fmt"
 	"ganxue-server/global"
 	"ganxue-server/utils/error"
 	"ganxue-server/utils/log"
@@ -84,8 +83,6 @@ func Verify(email string, verCode string) bool {
 		log.Error(err)
 		return false
 	}
-
-	fmt.Println(val)
 
 	if val != verCode {
 		return false

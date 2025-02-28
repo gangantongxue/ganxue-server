@@ -16,33 +16,33 @@ func SignIn() app.HandlerFunc {
 		user := user_model.User{}
 		// 解析请求体
 		if err := ctx.Bind(&user); err != nil {
-			ctx.String(400, "请求错误")
+			ctx.JSON(400, map[string]string{"message": "解析请求体失败"})
 			return
 		}
 		// 查找用户
 		_user, err := mysql.FindUserByEmail(user.Email)
 		// 用户不存在
 		if err != nil {
-			ctx.String(400, "未注册")
+			ctx.JSON(400, map[string]string{"message": "未注册"})
 			return
 		}
 
 		// 密码校验
 		if !password.ComparePasswords(_user.Password, user.Password) {
-			ctx.String(400, "密码错误")
+			ctx.JSON(400, map[string]string{"message": "密码错误"})
 			return
 		}
 
 		// 生成token
 		var shortToken, longToken string
-		if shortToken, err = token.GenerateShortToken(user.ID); err != nil {
+		if shortToken, err = token.GenerateShortToken(_user.ID); err != nil {
 			log.Error(err)
-			ctx.String(500, "服务器错误")
+			ctx.JSON(500, map[string]string{"message": "服务器错误"})
 			return
 		}
-		if longToken, err = token.GenerateLongToken(user.ID); err != nil {
+		if longToken, err = token.GenerateLongToken(_user.ID); err != nil {
 			log.Error(err)
-			ctx.String(500, "服务器错误")
+			ctx.JSON(500, map[string]string{"message": "服务器错误"})
 			return
 		}
 		ctx.JSON(200, struct {

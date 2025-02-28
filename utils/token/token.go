@@ -12,7 +12,7 @@ func GenerateShortToken(userID uint) (string, *mError.Error) {
 	// 生成token
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"userID": userID,
-		"exp":    time.Now().Add(time.Minute).Unix(),
+		"exp":    time.Now().Add(time.Minute * 15).Unix(),
 	})
 
 	// 生成token字符串
