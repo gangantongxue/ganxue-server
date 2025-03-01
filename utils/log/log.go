@@ -5,12 +5,14 @@ import (
 	"fmt"
 	"ganxue-server/global"
 	err "ganxue-server/utils/error"
+	"os"
 	"strconv"
 	"time"
 )
 
 var ctx = context.Background()
 var Signal = make(chan uint8, 100)
+var logFile *os.File
 
 const (
 	DebugKey uint8 = 0
@@ -38,6 +40,8 @@ const (
 
 func Init() {
 	go processLog()
+
+	processLogFile()
 }
 
 // Parse 解析 interface{}
