@@ -8,11 +8,11 @@ import (
 )
 
 func LogMid() app.HandlerFunc {
-	return func(ctx context.Context, c *app.RequestContext) {
+	return func(c context.Context, ctx *app.RequestContext) {
 		start := time.Now()
-		path := c.Request.URI().PathOriginal()
+		path := ctx.Request.URI().PathOriginal()
 
-		c.Next(ctx)
+		ctx.Next(c)
 		duration := time.Since(start)
 
 		log.Debug("Request: ", string(path), " , Duration: ", duration)
