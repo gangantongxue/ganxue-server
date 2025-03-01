@@ -1,7 +1,5 @@
 package main
 
-// TODO:ver-code
-
 import (
 	"ganxue-server/initialize"
 	"ganxue-server/router"

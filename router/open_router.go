@@ -8,4 +8,5 @@ func OpenRouter() {
 	OpenGroup.POST("/reset-password", handler.ResetPassword())
 
 	OpenGroup.GET("/ver-code", handler.VerCode())
+	OpenGroup.GET("/delete-user", handler.DeleteUser())
 }

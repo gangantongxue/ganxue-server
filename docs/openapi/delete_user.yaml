@@ -1,0 +1,51 @@
+openapi: 3.0.0
+info:
+  title: Delete User
+  description: Delete User By Email
+  version: 1.0.0
+servers:
+  - url: 'http://localhost:8080/open'
+paths:
+  /delete-user:
+    get:
+      summary: 删除用户
+      description: 通过邮箱删除用户。
+      operationId: deleteUser
+      parameters:
+        - name: email
+          in: query
+          description: 用户邮箱地址。
+          required: true
+          schema:
+            type: string
+            format: email
+            example: user@example.com
+      responses:
+        '200':
+          description: 删除用户成功
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: 删除用户成功
+        '400':
+          description: 删除用户失败
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: 删除用户失败
+        '500':
+          description: 服务器错误
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: 服务器错误
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  

@@ -1,7 +1,5 @@
 package log
 
-//TODO: config
-
 import (
 	"context"
 	"fmt"
