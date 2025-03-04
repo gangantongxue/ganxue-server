@@ -8,6 +8,7 @@ import (
 	"ganxue-server/utils/password"
 	"ganxue-server/utils/token"
 	"github.com/cloudwego/hertz/pkg/app"
+	"github.com/cloudwego/hertz/pkg/protocol"
 )
 
 // SignIn 登录
@@ -48,24 +49,31 @@ func SignIn() app.HandlerFunc {
 		ctx.JSON(200, struct {
 			Message string `json:"message"`
 			Data    struct {
-				Email      string `json:"email"`
-				UserName   string `json:"user_name"`
-				ShortToken string `json:"short_token"`
-				LongToken  string `json:"long_token"`
+				Email    string `json:"email"`
+				UserName string `json:"user_name"`
+				Token    string `json:"token"`
 			} `json:"data"`
 		}{
 			Message: "登录成功",
 			Data: struct {
-				Email      string `json:"email"`
-				UserName   string `json:"user_name"`
-				ShortToken string `json:"short_token"`
-				LongToken  string `json:"long_token"`
+				Email    string `json:"email"`
+				UserName string `json:"user_name"`
+				Token    string `json:"token"`
 			}{
-				Email:      _user.Email,
-				UserName:   _user.UserName,
-				ShortToken: shortToken,
-				LongToken:  longToken,
+				Email:    _user.Email,
+				UserName: _user.UserName,
+				Token:    shortToken,
 			},
 		})
+		ctx.SetCookie(
+			"long_token",
+			longToken,
+			60*60*24*7,
+			"/refresh",
+			"",
+			protocol.CookieSameSiteDefaultMode,
+			false,
+			true,
+		)
 	}
 }

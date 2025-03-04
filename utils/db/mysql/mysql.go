@@ -64,6 +64,7 @@ func InitDB() *error.Error {
 	if err := global.DB.AutoMigrate(&user_model.User{}); err != nil {
 		return error.New(error.AutoMigrateError, err, "自动迁移失败")
 	}
+
 	return nil
 }
 

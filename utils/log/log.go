@@ -20,6 +20,7 @@ const (
 	ErrorKey uint8 = 2
 	PanicKey uint8 = 3
 	FatalKey uint8 = 4
+	ClearKey uint8 = 5
 )
 
 var logKey = map[uint8]string{

@@ -4,37 +4,21 @@ import (
 	"context"
 	"ganxue-server/utils/token"
 	"github.com/cloudwego/hertz/pkg/app"
-	"github.com/cloudwego/hertz/pkg/protocol"
+	"strings"
 )
 
 func JwtMiddleware() app.HandlerFunc {
 	return func(c context.Context, ctx *app.RequestContext) {
-		// 解析cookie
-		shortToken := ctx.Cookie("shortToken")
+		// 解析token
+		authHeader := ctx.Request.Header.Get("Authorization")
+		shortToken := strings.TrimPrefix(authHeader, "Bearer ")
 
-		userID, err := token.ParseToken(string(shortToken))
+		userID, err := token.ParseToken(shortToken)
 		if err != nil {
-			longToken := ctx.Cookie("longToken")
-			userID, err = token.ParseToken(string(longToken))
-			if err != nil {
-				ctx.AbortWithStatus(401)
-				return
-			}
-			newShortToken, err := token.GenerateShortToken(userID)
-			if err != nil {
-				ctx.AbortWithStatus(401)
-				return
-			}
-			ctx.SetCookie(
-				"shortToken",
-				newShortToken,
-				60*15,
-				"/",
-				"",
-				protocol.CookieSameSiteDefaultMode,
-				false,
-				true)
+			ctx.AbortWithStatus(401)
+			return
 		}
+
 		c = context.WithValue(c, "userID", userID)
 		ctx.Next(c)
 	}

@@ -48,12 +48,9 @@ paths:
                       user_name:
                         type: string
                         example: username
-                      short_token:
+                      token:
                         type: string
                         example: short-token-value
-                      long_token:
-                        type: string
-                        example: long-token-value
         '400':
           description: 请求错误或未注册或密码错误
           content:

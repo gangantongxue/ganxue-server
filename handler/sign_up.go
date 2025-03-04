@@ -9,6 +9,7 @@ import (
 	"ganxue-server/utils/token"
 	"ganxue-server/utils/ver_code"
 	"github.com/cloudwego/hertz/pkg/app"
+	"github.com/cloudwego/hertz/pkg/protocol"
 )
 
 // SignUp 创建用户
@@ -23,11 +24,7 @@ func SignUp() app.HandlerFunc {
 			ctx.JSON(400, map[string]string{"message": "解析请求体失败"})
 			return
 		}
-		// 验证验证码
-		if !ver_code.Verify(user.Email, user.VerCode) {
-			ctx.JSON(400, map[string]string{"message": "验证码错误"})
-			return
-		}
+
 		// 查找用户
 		_user, err := mysql.FindUserByEmail(user.Email)
 		// 用户已存在
@@ -48,6 +45,12 @@ func SignUp() app.HandlerFunc {
 					UserName: _user.UserName,
 				},
 			})
+			return
+		}
+
+		// 验证验证码
+		if !ver_code.Verify(user.Email, user.VerCode) {
+			ctx.JSON(400, map[string]string{"message": "验证码错误"})
 			return
 		}
 
@@ -82,25 +85,32 @@ func SignUp() app.HandlerFunc {
 		ctx.JSON(200, struct {
 			Message string `json:"message"`
 			Data    struct {
-				Email      string `json:"email"`
-				UserName   string `json:"user_name"`
-				ShortToken string `json:"short_token"`
-				LongToken  string `json:"long_token"`
+				Email    string `json:"email"`
+				UserName string `json:"user_name"`
+				Token    string `json:"token"`
 			} `json:"data"`
 		}{
 			Message: "注册成功",
 			Data: struct {
-				Email      string `json:"email"`
-				UserName   string `json:"user_name"`
-				ShortToken string `json:"short_token"`
-				LongToken  string `json:"long_token"`
+				Email    string `json:"email"`
+				UserName string `json:"user_name"`
+				Token    string `json:"token"`
 			}{
-				Email:      user.Email,
-				UserName:   user.UserName,
-				ShortToken: shortToken,
-				LongToken:  longToken,
+				Email:    user.Email,
+				UserName: user.UserName,
+				Token:    shortToken,
 			},
 		})
+		ctx.SetCookie(
+			"long_token",
+			longToken,
+			60*60*24*7,
+			"/refresh",
+			"",
+			protocol.CookieSameSiteDefaultMode,
+			false,
+			true,
+		)
 		return
 	}
 }

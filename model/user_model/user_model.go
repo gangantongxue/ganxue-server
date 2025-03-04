@@ -12,7 +12,7 @@ type User struct {
 	//}
 	UserName string `gorm:"column:user_name" json:"user_name"`
 	Password string `gorm:"column:password" json:"password"`
-	Email    string `gorm:"column:email;type:varchar(255);uniqueIndex" json:"email"`
+	Email    string `gorm:"column:email;type:varchar(255)" json:"email"`
 }
 
 func (u *User) TableName() string {

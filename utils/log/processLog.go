@@ -34,14 +34,18 @@ func processLog() {
 	}(logFile)
 	for {
 		signal := <-Signal
+
+		var log string
 		// 从redis中获取日志
-		log, err := global.RDB.LPop(context.Background(), logKey[signal]).Result()
-		if errors.Is(err, redis.Nil) {
-			fmt.Println("Redis 列表为空或键不存在:", logKey[signal])
-			continue
-		} else if err != nil {
-			fmt.Println("redis获取日志失败:", err)
-			return
+		if signal != ClearKey {
+			log, err = global.RDB.LPop(context.Background(), logKey[signal]).Result()
+			if errors.Is(err, redis.Nil) {
+				fmt.Println("Redis 列表为空或键不存在:", logKey[signal])
+				continue
+			} else if err != nil {
+				fmt.Println("redis获取日志失败:", err)
+				return
+			}
 		}
 
 		switch signal {
@@ -73,6 +77,8 @@ func processLog() {
 				fmt.Println("写入日志失败", err)
 			}
 			os.Exit(1)
+		case ClearKey:
+			clearLogFile()
 		}
 	}
 }
@@ -125,7 +131,7 @@ func processLogFile() {
 	global.CRON = cron.New()
 	if _, err := global.CRON.AddFunc("0 22 * * *", func() {
 		sendLogFile()
-		clearLogFile()
+		Signal <- ClearKey
 	}); err != nil {
 		today := time.Now().Format("2006-01-02")
 		dst := filepath.Join("utils/log/log_file/", today)
@@ -145,6 +151,7 @@ func processLogFile() {
 			fmt.Println("复制文件失败：", err)
 			return
 		}
-		clearLogFile()
+		Signal <- ClearKey
 	}
+	global.CRON.Start()
 }
