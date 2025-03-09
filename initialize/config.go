@@ -28,6 +28,7 @@ func LoadConfig() *error.Error {
 			}
 		}
 	}
+	global.VIPER.AutomaticEnv()
 
 	if err := global.VIPER.Unmarshal(&global.CONFIG); err != nil {
 		return error.New(error.LoadConfigError, err, "解析配置文件失败")

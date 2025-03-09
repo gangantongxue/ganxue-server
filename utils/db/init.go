@@ -1,6 +1,7 @@
 package db
 
 import (
+	"ganxue-server/utils/db/mongodb"
 	"ganxue-server/utils/db/mysql"
 	"ganxue-server/utils/db/redis"
 )
@@ -8,4 +9,5 @@ import (
 func Init() {
 	mysql.Init()
 	redis.Init()
+	mongodb.Init()
 }
