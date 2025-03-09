@@ -6,6 +6,7 @@ import (
 	"github.com/go-redis/redis/v8"
 	"github.com/robfig/cron/v3"
 	"github.com/spf13/viper"
+	"go.mongodb.org/mongo-driver/mongo"
 	"gorm.io/gorm"
 )
 
@@ -15,6 +16,7 @@ var (
 	RDB    *redis.Client
 	DB     *gorm.DB
 	CRON   *cron.Cron
+	MDB    *mongo.Database
 )
 
 var (
