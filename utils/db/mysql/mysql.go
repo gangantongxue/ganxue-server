@@ -22,6 +22,10 @@ func Init() {
 	}
 }
 
+func Close() {
+
+}
+
 // InitDB 初始化数据库
 func InitDB() *error.Error {
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
@@ -61,7 +65,7 @@ func InitDB() *error.Error {
 	sqlDB.SetConnMaxLifetime(time.Second * 10)
 
 	// 自动迁移
-	if err := global.DB.AutoMigrate(&user_model.User{}); err != nil {
+	if err := global.DB.AutoMigrate(&user_model.User{}, &user_model.UserInfo{}); err != nil {
 		return error.New(error.AutoMigrateError, err, "自动迁移失败")
 	}
 
@@ -69,8 +73,12 @@ func InitDB() *error.Error {
 }
 
 // Create 创建用户
-func Create(user interface{}) *error.Error {
+func Create(user *user_model.User) *error.Error {
 	if err := global.DB.Create(user).Error; err != nil {
+		return error.New(error.CreateNewUserError, err, "创建用户失败")
+	}
+	user.UserInfo.UserID = user.ID
+	if err := global.DB.Create(&user.UserInfo).Error; err != nil {
 		return error.New(error.CreateNewUserError, err, "创建用户失败")
 	}
 	return nil
@@ -122,4 +130,16 @@ func Delete(user interface{}) *error.Error {
 		return error.New(error.DeleteUserError, err, "删除用户失败")
 	}
 	return nil
+}
+
+// FindUserInfoByID 根据ID查找用户信息
+func FindUserInfoByID(id uint) (*user_model.User, *error.Error) {
+	var user user_model.User
+	if err := global.DB.Preload("UserInfo").Where("id = ?", id).First(&user).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, error.New(error.GetUserError, err, "用户未找到")
+		}
+		return nil, error.New(error.GetUserError, err, "查找用户失败")
+	}
+	return &user, nil
 }
