@@ -19,5 +19,12 @@ func Init() {
 		fmt.Println("redis连接失败", str, _err)
 		os.Exit(1)
 	}
+}
 
+func Close() {
+	err := global.RDB.Close()
+	if err != nil {
+		fmt.Println("redis关闭失败", err)
+		os.Exit(1)
+	}
 }
