@@ -82,6 +82,16 @@ func SignUp() app.HandlerFunc {
 			ctx.JSON(500, map[string]string{"message": "服务器错误"})
 			return
 		}
+		ctx.SetCookie(
+			"long_token",
+			longToken,
+			60*60*24*7,
+			"/",
+			"",
+			protocol.CookieSameSiteLaxMode,
+			false,
+			true,
+		)
 		ctx.JSON(200, struct {
 			Message string `json:"message"`
 			Data    struct {
@@ -101,16 +111,7 @@ func SignUp() app.HandlerFunc {
 				Token:    shortToken,
 			},
 		})
-		ctx.SetCookie(
-			"long_token",
-			longToken,
-			60*60*24*7,
-			"/refresh",
-			"",
-			protocol.CookieSameSiteDefaultMode,
-			false,
-			true,
-		)
+
 		return
 	}
 }

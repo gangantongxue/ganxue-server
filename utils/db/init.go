@@ -11,3 +11,9 @@ func Init() {
 	redis.Init()
 	mongodb.Init()
 }
+
+func Close() {
+	mysql.Close()
+	redis.Close()
+	mongodb.Close()
+}

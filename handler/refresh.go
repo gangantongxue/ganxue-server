@@ -2,6 +2,7 @@ package handler
 
 import (
 	"context"
+	"ganxue-server/utils/log"
 	"ganxue-server/utils/token"
 	"github.com/cloudwego/hertz/pkg/app"
 )
@@ -13,11 +14,13 @@ func Refresh() app.HandlerFunc {
 		userID, err := token.ParseToken(string(longToken))
 		if err != nil {
 			ctx.AbortWithStatus(401)
+			log.Debug("Parse token error")
 			return
 		}
 		shortToken, err := token.GenerateShortToken(userID)
 		if err != nil {
 			ctx.AbortWithStatus(401)
+			log.Debug("Generate short token error")
 			return
 		}
 		ctx.JSON(200, map[string]string{

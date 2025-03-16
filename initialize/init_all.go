@@ -1,6 +1,7 @@
 package initialize
 
 import (
+	"ganxue-server/static"
 	"ganxue-server/utils/db"
 	"ganxue-server/utils/log"
 )
@@ -16,4 +17,9 @@ func InitAll() {
 	// 初始化日志
 	log.Init()
 
+	static.Init()
+}
+
+func CloseAll() {
+	db.Close()
 }
