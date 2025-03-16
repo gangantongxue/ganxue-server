@@ -19,4 +19,5 @@ const (
 	RedisError           = 10012 // redis错误
 	ReadFileError        = 10013 // 读取文件错误
 	SendEmailError       = 10014 // 发送邮件错误
+	MongoError           = 10015 // mongo错误
 )
