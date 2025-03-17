@@ -38,7 +38,7 @@ func Close() {
 
 // Find 查找数据
 func Find(collection *mongo.Collection, filter interface{}, result interface{}) *error.Error {
-	err := collection.FindOne(global.CTX, filter).Decode(&result)
+	err := collection.FindOne(global.CTX, filter).Decode(result)
 	if err != nil {
 		return error.New(error.MongoError, err, "MongoDB查询失败")
 	}

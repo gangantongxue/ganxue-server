@@ -8,6 +8,7 @@ import (
 	"ganxue-server/utils/bf"
 	"ganxue-server/utils/db/mongodb"
 	"ganxue-server/utils/log"
+	"go.mongodb.org/mongo-driver/bson"
 	"io/fs"
 	"os"
 	"path/filepath"
@@ -32,12 +33,12 @@ func Init() {
 	}
 	for _, v := range data {
 		if v.M.Content != "" {
-			if err := mongodb.Insert(global.MD, v.M); err != nil {
+			if err := mongodb.Update(global.MD, bson.M{"id": v.M.ID}, bson.M{"$set": v.M}, true); err != nil {
 				log.Error("插入数据库失败", err)
 			}
 		}
 		if v.A.ID != "" {
-			if err := mongodb.Insert(global.ANSWER, v.A); err != nil {
+			if err := mongodb.Update(global.ANSWER, bson.M{"id": v.A.ID}, bson.M{"$set": v.A}, true); err != nil {
 				log.Error("插入数据库失败", err)
 			}
 		}

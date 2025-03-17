@@ -1,0 +1,65 @@
+openapi: 3.0.0
+info:
+  title: Get Docs API
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080/auth
+paths:
+  /get-docs:
+    get:
+      summary: 获取文档
+      description: 根据提供的ID获取文档内容
+      parameters:
+        - in: query
+          name: id
+          required: true
+          schema:
+            type: string
+          description: 文档的唯一标识符
+      responses:
+        '200':
+          description: 查询成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      content:
+                        type: string
+                        description: 文档内容的Markdown格式
+                      code:
+                        type: string
+        '400':
+          description: 请求参数错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '500':
+          description: 服务器错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+components:
+  schemas:
+    Markdown:
+      type: object
+      properties:
+        id:
+          type: string
+        content:
+          type: string
