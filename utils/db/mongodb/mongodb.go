@@ -55,8 +55,9 @@ func Insert(collection *mongo.Collection, data interface{}) *error.Error {
 }
 
 // Update 更新数据
-func Update(collection *mongo.Collection, filter interface{}, update interface{}) *error.Error {
-	_, err := collection.UpdateOne(global.CTX, filter, update)
+func Update(collection *mongo.Collection, filter interface{}, update interface{}, upsert bool) *error.Error {
+	opts := options.Update().SetUpsert(upsert)
+	_, err := collection.UpdateOne(global.CTX, filter, update, opts)
 	if err != nil {
 		return error.New(error.MongoError, err, "MongoDB更新失败")
 	}

@@ -17,6 +17,7 @@ func InitAll() {
 	// 初始化日志
 	log.Init()
 
+	// 初始化静态文件
 	static.Init()
 }
 
