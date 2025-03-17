@@ -1,4 +1,4 @@
-package handler
+package open
 
 import (
 	"context"
@@ -50,9 +50,9 @@ func SignIn() app.HandlerFunc {
 			"long_token",
 			longToken,
 			60*60*24*7,
-			"/",
+			"/open/refresh",
 			"",
-			protocol.CookieSameSiteLaxMode,
+			protocol.CookieSameSiteNoneMode,
 			false,
 			true,
 		)

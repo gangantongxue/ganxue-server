@@ -1,4 +1,4 @@
-package handler
+package auth
 
 import (
 	"context"
@@ -52,6 +52,7 @@ func UserInfo() app.HandlerFunc {
 				"study_stats": map[string]interface{}{
 					"streak_days": user.UserInfo.StreakDays,
 					"total_days":  user.UserInfo.TotalDays,
+					"last_time":   user.UserInfo.LastTime,
 				},
 			},
 		})

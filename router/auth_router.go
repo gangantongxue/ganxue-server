@@ -1,8 +1,10 @@
 package router
 
-import "ganxue-server/handler"
+import (
+	"ganxue-server/handler/auth"
+)
 
 func AuthRouter() {
-	AuthGroup.POST("reset-password", handler.ResetPassword())
-	AuthGroup.GET("user/info", handler.UserInfo())
+	AuthGroup.POST("reset-password", auth.ResetPassword())
+	AuthGroup.GET("user/info", auth.UserInfo())
 }

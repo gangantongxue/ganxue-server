@@ -1,13 +1,15 @@
 package router
 
-import "ganxue-server/handler"
+import (
+	"ganxue-server/handler/open"
+)
 
 func OpenRouter() {
-	OpenGroup.POST("/sign-up", handler.SignUp())
-	OpenGroup.POST("/sign-in", handler.SignIn())
-	OpenGroup.POST("/forget-password", handler.ForgetPassword())
+	OpenGroup.POST("/sign-up", open.SignUp())
+	OpenGroup.POST("/sign-in", open.SignIn())
+	OpenGroup.POST("/forget-password", open.ForgetPassword())
 
-	OpenGroup.GET("/refresh", handler.Refresh())
-	OpenGroup.GET("/ver-code", handler.VerCode())
-	OpenGroup.GET("/delete-user", handler.DeleteUser())
+	OpenGroup.GET("/refresh", open.Refresh())
+	OpenGroup.GET("/ver-code", open.VerCode())
+	OpenGroup.GET("/delete-user", open.DeleteUser())
 }
