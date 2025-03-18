@@ -132,8 +132,8 @@ func Delete(user interface{}) *error.Error {
 	return nil
 }
 
-// FindUserInfoByID 根据ID查找用户信息
-func FindUserInfoByID(id uint) (*user_model.User, *error.Error) {
+// FindUserAndInfoByID 根据ID查找用户信息
+func FindUserAndInfoByID(id uint) (*user_model.User, *error.Error) {
 	var user user_model.User
 	if err := global.DB.Preload("UserInfo").Where("id = ?", id).First(&user).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -142,4 +142,16 @@ func FindUserInfoByID(id uint) (*user_model.User, *error.Error) {
 		return nil, error.New(error.GetUserError, err, "查找用户失败")
 	}
 	return &user, nil
+}
+
+// FindInfoByID 根据ID查找用户信息
+func FindInfoByID(id uint) (*user_model.UserInfo, *error.Error) {
+	var userInfo user_model.UserInfo
+	if err := global.DB.Where("user_id = ?", id).First(&userInfo).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, error.New(error.GetUserError, err, "用户未找到")
+		}
+		return nil, error.New(error.GetUserError, err, "查找用户失败")
+	}
+	return &userInfo, nil
 }

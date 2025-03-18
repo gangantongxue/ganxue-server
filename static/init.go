@@ -5,7 +5,6 @@ import (
 	"ganxue-server/global"
 	"ganxue-server/model/answer_model"
 	"ganxue-server/model/md_model"
-	"ganxue-server/utils/bf"
 	"ganxue-server/utils/db/mongodb"
 	"ganxue-server/utils/log"
 	"go.mongodb.org/mongo-driver/bson"
@@ -73,8 +72,8 @@ func getFileContent(data *Static, path string) error {
 	t := (*data)[name]
 	switch ext {
 	case "md":
-		content := bf.ToHTML(val)
-		t.M.Content = string(content)
+		//content := bf.ToHTML(val)
+		t.M.Content = string(val)
 		t.M.ID = name
 	case "txt":
 		t.M.Code = string(val)

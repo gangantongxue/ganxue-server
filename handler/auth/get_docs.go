@@ -5,11 +5,11 @@ import (
 	"ganxue-server/global"
 	"ganxue-server/model/md_model"
 	"ganxue-server/utils/db/mongodb"
+	"ganxue-server/utils/db/mysql"
+	"ganxue-server/utils/log"
 	"github.com/cloudwego/hertz/pkg/app"
 	"go.mongodb.org/mongo-driver/bson"
 )
-
-// TODO: 更新上次学习章节
 
 func GetDocs() app.HandlerFunc {
 	return func(c context.Context, ctx *app.RequestContext) {
@@ -23,8 +23,8 @@ func GetDocs() app.HandlerFunc {
 		var md md_model.Markdown
 		// 查询数据库
 		if err := mongodb.Find(global.MD, bson.M{"id": id}, &md); err != nil {
-			ctx.JSON(500, map[string]string{
-				"message": "服务器错误",
+			ctx.JSON(400, map[string]string{
+				"message": "获取文档内容失败",
 			})
 			return
 		}
@@ -32,5 +32,16 @@ func GetDocs() app.HandlerFunc {
 			"message": "查询成功",
 			"data":    md,
 		})
+		userID := c.Value("userID").(uint)
+		//userID, _ = strconv.ParseUint(id, 10, 64)
+
+		userInfo, err := mysql.FindInfoByID(uint(userID))
+		if err != nil {
+			log.Error("用户信息查询失败", err)
+		}
+		userInfo.LastTime = id
+		if err := mysql.Update(userInfo); err != nil {
+			log.Error("用户信息更新失败", err)
+		}
 	}
 }

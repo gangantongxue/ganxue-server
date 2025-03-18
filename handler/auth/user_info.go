@@ -14,7 +14,7 @@ func UserInfo() app.HandlerFunc {
 			ctx.AbortWithStatus(401)
 			return
 		}
-		user, err := mysql.FindUserInfoByID(userID.(uint))
+		user, err := mysql.FindUserAndInfoByID(userID.(uint))
 		if err != nil {
 			ctx.AbortWithStatus(401)
 			return
