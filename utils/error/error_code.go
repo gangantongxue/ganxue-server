@@ -20,4 +20,7 @@ const (
 	ReadFileError        = 10013 // 读取文件错误
 	SendEmailError       = 10014 // 发送邮件错误
 	MongoError           = 10015 // mongo错误
+	ParseJsonError       = 10016 // 解析json错误
+	RunCodeError         = 10017 // 运行代码错误
+	CodeError            = 10018 // 代码错误
 )
