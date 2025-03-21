@@ -2,6 +2,7 @@ package error
 
 import (
 	"encoding/json"
+	"errors"
 	"log"
 	"strconv"
 )
@@ -56,4 +57,8 @@ func (e *Error) ToString() string {
 	var str string
 	str = "Error: code " + strconv.Itoa(e.Code) + " error " + e.Err + " message " + e.Message
 	return str
+}
+
+func (e *Error) ToError() error {
+	return errors.New(e.Err)
 }

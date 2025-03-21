@@ -50,9 +50,11 @@ func UserInfo() app.HandlerFunc {
 					"user_name": user.UserName,
 				},
 				"study_stats": map[string]interface{}{
-					"streak_days": user.UserInfo.StreakDays,
-					"total_days":  user.UserInfo.TotalDays,
-					"last_time":   user.UserInfo.LastTime,
+					"streak_days":   user.UserInfo.StreakDays,
+					"total_days":    user.UserInfo.TotalDays,
+					"go_last_time":  user.UserInfo.GoLastChapter,
+					"c_last_time":   user.UserInfo.CLastChapter,
+					"cpp_last_time": user.UserInfo.CppLastChapter,
 				},
 			},
 		})

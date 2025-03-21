@@ -1,0 +1,74 @@
+openapi: 3.0.0
+info:
+  title: Run Code
+  version: 1.0.0
+servers:
+  - url: 'http://localhost:8080/auth'
+paths:
+  /run-code:
+    post:
+      summary: Run Code
+      description: Run Code
+      operationId: runCode
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  description: id
+                  example: 00
+                code:
+                  type: string
+                  description: code
+                  example: code
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Success
+                    description: Success
+        '206':
+          description: Partial Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  data:
+                    type: string
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

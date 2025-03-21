@@ -21,17 +21,17 @@ type Static map[string]struct {
 
 func Init() {
 	data := make(Static)
-	files, err := getAllFilesRecursive("./static/golang")
+	golang, err := getAllFilesRecursive("./static/golang/")
 	if err != nil {
 		log.Error("获取文件失败", err)
 	}
-	for _, file := range files {
-		if err := getFileContent(&data, file); err != nil {
+	for _, file := range golang {
+		if err := getFileContent(&data, file, "golang"); err != nil {
 			log.Error("获取文件内容失败", err)
 		}
 	}
 	for _, v := range data {
-		if v.M.Content != "" {
+		if v.M.ID != "" {
 			if err := mongodb.Update(global.MD, bson.M{"id": v.M.ID}, bson.M{"$set": v.M}, true); err != nil {
 				log.Error("插入数据库失败", err)
 			}
@@ -63,7 +63,7 @@ func getAllFilesRecursive(root string) ([]string, error) {
 }
 
 // getFileContent 获取文件内容
-func getFileContent(data *Static, path string) error {
+func getFileContent(data *Static, path string, group string) error {
 	name, ext := fileType(path)
 	val, err := os.ReadFile(path)
 	if err != nil {
@@ -74,21 +74,21 @@ func getFileContent(data *Static, path string) error {
 	case "md":
 		//content := bf.ToHTML(val)
 		t.M.Content = string(val)
-		t.M.ID = name
+		t.M.ID = group + name
 	case "txt":
 		t.M.Code = string(val)
-		t.M.ID = name
+		t.M.ID = group + name
 	case "json":
 		if err := json.Unmarshal(val, &t.A); err != nil {
 			return err
 		}
-		t.A.ID = name
+		t.A.ID = group + name
 	}
 	(*data)[name] = t
 	return nil
 }
 
-// 文件分类
+// 文件分类 返回 上级目录名 文件名 文件扩展名
 func fileType(path string) (string, string) {
 	if path == "" {
 		return "", ""

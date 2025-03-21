@@ -8,6 +8,7 @@ import (
 	"github.com/robfig/cron/v3"
 	"github.com/spf13/viper"
 	"go.mongodb.org/mongo-driver/mongo"
+	"golang.org/x/sync/singleflight"
 	"gorm.io/gorm"
 )
 
@@ -21,6 +22,7 @@ var (
 	MD      *mongo.Collection
 	ANSWER  *mongo.Collection
 	WATCHER *fsnotify.Watcher
+	GROUP   singleflight.Group
 )
 
 var (

@@ -14,15 +14,23 @@ import (
 func GetDocs() app.HandlerFunc {
 	return func(c context.Context, ctx *app.RequestContext) {
 		id := ctx.Query("id")
+		group := ctx.Query("group")
 		if id == "" {
 			ctx.JSON(400, map[string]string{
 				"message": "id不能为空",
 			})
 			return
 		}
-		var md md_model.Markdown
+
 		// 查询数据库
-		if err := mongodb.Find(global.MD, bson.M{"id": id}, &md); err != nil {
+		md, _err, _ := global.GROUP.Do("md"+id, func() (interface{}, error) {
+			var result md_model.Markdown
+			if err := mongodb.Find(global.MD, bson.M{"id": id}, &result); err != nil {
+				return nil, err.ToError()
+			}
+			return result, nil
+		})
+		if _err != nil {
 			ctx.JSON(400, map[string]string{
 				"message": "获取文档内容失败",
 			})
@@ -33,13 +41,21 @@ func GetDocs() app.HandlerFunc {
 			"data":    md,
 		})
 		userID := c.Value("userID").(uint)
-		//userID, _ = strconv.ParseUint(id, 10, 64)
 
 		userInfo, err := mysql.FindInfoByID(uint(userID))
 		if err != nil {
 			log.Error("用户信息查询失败", err)
 		}
-		userInfo.LastTime = id
+
+		switch group {
+		case "golang":
+			userInfo.GoLastChapter = id
+		case "c":
+			userInfo.CLastChapter = id
+		case "cpp":
+			userInfo.CppLastChapter = id
+		}
+
 		if err := mysql.Update(userInfo); err != nil {
 			log.Error("用户信息更新失败", err)
 		}
