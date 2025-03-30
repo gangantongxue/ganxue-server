@@ -1,0 +1,10 @@
+package main
+
+func UserCode() {
+    var a, b int
+    fmt.Scan(&a, &b)
+    sub, isOddNum := add(a, b)
+    fmt.Println("a + b = ", sub, " isOddNum: ", isOddNum)
+}
+
+/*请在下方定义函数add()*/

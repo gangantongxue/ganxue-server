@@ -1,0 +1,11 @@
+package main
+
+import "fmt"
+
+func UserCode() {
+    var score int
+    fmt.Scan(&score)
+    /*请在下方输入你的代码*/
+
+
+}

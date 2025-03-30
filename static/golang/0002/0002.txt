@@ -1,0 +1,12 @@
+package main
+
+import "fmt"
+
+func UserCode() {
+       /*######a#####*/
+
+       /*######b#####*/
+
+
+       fmt.Println("a = ", a, ", b = ", b)
+}
