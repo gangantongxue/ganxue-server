@@ -32,12 +32,12 @@ func Init() {
 	}
 	for _, v := range data {
 		if v.M.ID != "" {
-			if err := mongodb.Update(global.MD, bson.M{"id": v.M.ID}, bson.M{"$set": v.M}, true); err != nil {
+			if err := mongodb.Update(global.GO_MD, bson.M{"id": v.M.ID}, bson.M{"$set": v.M}, true); err != nil {
 				log.Error("插入数据库失败", err)
 			}
 		}
 		if v.A.ID != "" {
-			if err := mongodb.Update(global.ANSWER, bson.M{"id": v.A.ID}, bson.M{"$set": v.A}, true); err != nil {
+			if err := mongodb.Update(global.GO_ANSWER, bson.M{"id": v.A.ID}, bson.M{"$set": v.A}, true); err != nil {
 				log.Error("插入数据库失败", err)
 			}
 		}
@@ -74,15 +74,15 @@ func getFileContent(data *Static, path string, group string) error {
 	case "md":
 		//content := bf.ToHTML(val)
 		t.M.Content = string(val)
-		t.M.ID = group + name
+		t.M.ID = name
 	case "txt":
 		t.M.Code = string(val)
-		t.M.ID = group + name
+		t.M.ID = name
 	case "json":
 		if err := json.Unmarshal(val, &t.A); err != nil {
 			return err
 		}
-		t.A.ID = group + name
+		t.A.ID = name
 	}
 	(*data)[name] = t
 	return nil

@@ -133,7 +133,7 @@ func processLogFile() {
 		sendLogFile()
 		Signal <- ClearKey
 	}); err != nil {
-		today := time.Now().Format("2006-01-02")
+		today := time.Now().Format("2006-0001-02")
 		dst := filepath.Join("utils/log/log_file/", today)
 		copyFile, err := os.Create(dst)
 		if err != nil {

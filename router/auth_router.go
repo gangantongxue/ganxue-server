@@ -6,7 +6,7 @@ import (
 
 func AuthRouter() {
 	AuthGroup.POST("reset-password", auth.ResetPassword())
-	//AuthGroup.POST("run-code", auth.RunCode())
+	AuthGroup.POST("run-code", auth.RunCode())
 
 	AuthGroup.GET("user/info", auth.UserInfo())
 	AuthGroup.GET("/get-docs", auth.GetDocs())

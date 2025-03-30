@@ -23,4 +23,7 @@ const (
 	ParseJsonError       = 10016 // 解析json错误
 	RunCodeError         = 10017 // 运行代码错误
 	CodeError            = 10018 // 代码错误
+	WriteFileError       = 10019 // 写入文件错误
+	CopyFileError        = 10020 // 复制文件错误
+	StdinError           = 10021 // stdin错误
 )

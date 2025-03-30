@@ -25,7 +25,7 @@ func GetDocs() app.HandlerFunc {
 		// 查询数据库
 		md, _err, _ := global.GROUP.Do("md"+id, func() (interface{}, error) {
 			var result md_model.Markdown
-			if err := mongodb.Find(global.MD, bson.M{"id": id}, &result); err != nil {
+			if err := mongodb.Find(global.GO_MD, bson.M{"id": id}, &result); err != nil {
 				return nil, err.ToError()
 			}
 			return result, nil

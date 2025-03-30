@@ -20,7 +20,7 @@ paths:
                 id:
                   type: string
                   description: id
-                  example: 00
+                  example: 0000
                 code:
                   type: string
                   description: code

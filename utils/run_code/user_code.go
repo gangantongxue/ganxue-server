@@ -2,20 +2,20 @@ package main
 
 import "fmt"
 
-func main() {
+func UserCode() {
 	var name string
 	var age int
 
 	fmt.Println("Please input your name:")
 
-    /*############*/
-	fmt.Scanf("  ",   )
+	/*############*/
+	fmt.Scanf("%s", &name)
 
 	fmt.Println("Please input your age:")
 
-    /*############*/
-	fmt.Scan(  )
+	/*############*/
+	fmt.Scan(age)
 
 	/*############*/
-	fmt.Printf("Hello, my name is %s, i am %d years old.\n",   ,   )
+	fmt.Printf("Hello, my name is %s, I am %d years old.\n", name, age)
 }

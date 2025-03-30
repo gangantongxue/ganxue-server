@@ -48,7 +48,7 @@ func Init() {
 // Parse 解析 interface{}
 func Parse(v []interface{}) string {
 	var str string
-	now := time.Now().Format("2006-01-02 15:04:05")
+	now := time.Now().Format("2006-0001-02 15:04:05")
 	str += Blue + now + Reset + " "
 	for _, v := range v {
 		switch v.(type) {
