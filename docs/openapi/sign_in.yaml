@@ -1,0 +1,79 @@
+openapi: 3.0.0
+info:
+  title: Ganxue Server API
+  description: Ganxue Server API for user sign-in functionality.
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080/open
+paths:
+  /sign-in:
+    post:
+      summary: 用户登录
+      description: 用户通过邮箱和密码进行登录验证，成功后返回用户信息和两个令牌（shortToken 和 longToken）。
+      operationId: signIn
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  description: 用户注册时使用的邮箱地址。
+                  example: user@example.com
+                password:
+                  type: string
+                  format: password
+                  description: 用户的登录密码。
+                  example: password123
+      responses:
+        '200':
+          description: 登录成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 登录成功
+                  data:
+                    type: object
+                    properties:
+                      email:
+                        type: string
+                        example: user@example.com
+                      user_name:
+                        type: string
+                        example: username
+                      token:
+                        type: string
+                        example: short-token-value
+        '400':
+          description: 请求错误或未注册或密码错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 请求错误
+        '500':
+          description: 服务器错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 服务器错误
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

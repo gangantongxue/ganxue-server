@@ -1,0 +1,43 @@
+openapi: 3.0.0
+info:
+  title: Refresh Token
+  description: Refresh Short Token
+  version: 1.0.0
+servers:
+  - url: 'http://localhost:8080/open'
+paths:
+  /refresh:
+    post:
+      summary: Refresh Short Token
+      description: Refresh Short Token using the long token from cookies
+      operationId: refresh
+      parameters:
+        - name: long_token
+          in: cookie
+          description: Long token used for refreshing short token
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Refresh Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+        '401':
+          description: Refresh Failed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid or expired long token"
+components:
+  securitySchemes: {}

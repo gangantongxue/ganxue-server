@@ -1,0 +1,41 @@
+openapi: 3.0.0
+info:
+  title: Detailed User Info
+  description: get detailed user info
+  version: 1.0.0
+servers:
+  - url: 'http://localhost:8080/auth'
+paths:
+  /detailed-user-info:
+    get:
+      summary: get detailed user info
+      parameters:
+        - in: query
+          name: id
+          required: true
+          schema:
+            type: string
+          description: 用户的唯一标识符
+      responses:
+        '200':
+          description: 查询成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user_name:
+                    type: string
+                  email:
+                    type: string
+                  create_at:
+                    type: string
+        '401':
+          description: 未登录
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  

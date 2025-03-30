@@ -1,0 +1,108 @@
+openapi: 3.0.0
+info:
+  title: Ganxue Server API
+  description: Ganxue Server API for user sign-up functionality.
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080/open
+paths:
+  /sign-up:
+    post:
+      summary: 用户注册
+      description: 用户通过邮箱、用户名、密码和验证码进行注册，成功后返回用户信息和两个令牌（shortToken 和 longToken）。
+      operationId: signUp
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  description: 用户注册时使用的邮箱地址。
+                  example: user@example.com
+                user_name:
+                  type: string
+                  description: 用户名。
+                  example: username
+                password:
+                  type: string
+                  format: password
+                  description: 用户的登录密码。
+                  example: password123
+                ver_code:
+                  type: string
+                  description: 验证码。
+                  example: 123456
+      responses:
+        '200':
+          description: 注册成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 注册成功
+                  data:
+                    type: object
+                    properties:
+                      email:
+                        type: string
+                        example: user@example.com
+                      user_name:
+                        type: string
+                        example: username
+                      token:
+                        type: string
+                        example: short-token-value
+        '400':
+          description: 请求错误、验证码错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 请求错误
+        '409':
+          description: 用户已存在
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 用户已存在
+                  data:
+                    type: object
+                    properties:
+                      email:
+                        type: string
+                        example: user@example.com
+                        description: 用户的邮箱地址。
+                      user_name:
+                        type: string
+                        example: username
+                        description: 用户名。
+        '500':
+          description: 服务器错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 服务器错误
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

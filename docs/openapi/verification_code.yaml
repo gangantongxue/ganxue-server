@@ -1,0 +1,43 @@
+openapi: 3.0.0
+info:
+  title: Ganxue Server API
+  description: Ganxue Server API for sending verification codes.
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080/open
+paths:
+  /ver-code:
+    get:
+      summary: 获取验证码
+      description: 通过邮箱获取验证码。
+      operationId: getVerificationCode
+      parameters:
+        - name: email
+          in: query
+          description: 用户注册时使用的邮箱地址。
+          required: true
+          schema:
+            type: string
+            format: email
+            example: user@example.com
+      responses:
+        '200':
+          description: 获取验证码成功
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: 获取验证码成功
+        '400':
+          description: 获取验证码失败
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: 获取验证码失败
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
