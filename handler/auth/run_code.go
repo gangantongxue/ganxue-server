@@ -65,18 +65,16 @@ func RunCode() app.HandlerFunc {
 		}
 
 		if err := cmd.Wait(); err != nil {
-			ctx.JSON(500, map[string]string{
-				"message": "等待命令执行完成失败",
-				"error":   stderr.String(),
-				"output":  stdout.String(),
-				"err":     err.Error(),
+			ctx.JSON(206, map[string]string{
+				"message": "执行出错",
+				"data":    stderr.String() + "\n" + err.Error(),
 			})
 			return
 		}
 
 		actualOut := stdout.String()
 		if stderr.String() != "" {
-			ctx.JSON(200, map[string]string{
+			ctx.JSON(206, map[string]string{
 				"message": "执行出错",
 				"error":   stderr.String(),
 			})
@@ -85,13 +83,13 @@ func RunCode() app.HandlerFunc {
 		if actualOut != ans.Output {
 			ctx.JSON(206, map[string]string{
 				"message": "结果错误",
-				"output":  actualOut,
+				"data":    actualOut,
 			})
 			return
 		} else {
 			ctx.JSON(200, map[string]string{
 				"message": "运行成功",
-				"output":  actualOut,
+				"data":    actualOut,
 			})
 		}
 	}
