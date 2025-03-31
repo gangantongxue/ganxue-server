@@ -134,4 +134,4 @@ go run main.go
 本项目采用 [MIT 许可证](LICENSE)。
 
 ## 联系信息
-如果你有任何问题或建议，请联系 [your-email@example.com](mailto:your-email@example.com)。
+如果你有任何问题或建议，请联系 [gangantongxue@outlook.com](mailto:gangantongxue@outlook.com)。
