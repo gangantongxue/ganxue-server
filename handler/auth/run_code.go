@@ -32,6 +32,8 @@ func RunCode() app.HandlerFunc {
 			"message": "等待运行中...",
 		})
 
+		global.RUN_CODE_MUTEX.Lock()
+
 		// 将用户代码写入文件中
 		if err := os.WriteFile("/home/ganxue-server/utils/run_code/user_code.go", []byte(userCode.Code), 0644); err != nil {
 			ctx.JSON(500, map[string]string{"message": "写入文件失败"})
@@ -92,5 +94,7 @@ func RunCode() app.HandlerFunc {
 				"data":    actualOut,
 			})
 		}
+
+		global.RUN_CODE_MUTEX.Unlock()
 	}
 }

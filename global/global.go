@@ -9,18 +9,20 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	"golang.org/x/sync/singleflight"
 	"gorm.io/gorm"
+	"sync"
 )
 
 var (
-	CONFIG    config.Config
-	VIPER     *viper.Viper
-	RDB       *redis.Client
-	DB        *gorm.DB
-	CRON      *cron.Cron
-	MDB       *mongo.Database
-	GO_MD     *mongo.Collection
-	GO_ANSWER *mongo.Collection
-	GROUP     singleflight.Group
+	CONFIG         config.Config
+	VIPER          *viper.Viper
+	RDB            *redis.Client
+	DB             *gorm.DB
+	CRON           *cron.Cron
+	MDB            *mongo.Database
+	GO_MD          *mongo.Collection
+	GO_ANSWER      *mongo.Collection
+	GROUP          singleflight.Group
+	RUN_CODE_MUTEX sync.Mutex
 )
 
 var (
