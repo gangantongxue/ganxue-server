@@ -3,10 +3,10 @@ package main
 import "fmt"
 
 func UserCode() {
-       /*######a#####*/
+    /*######a#####*/
 
-       /*######b#####*/
+    /*######b#####*/
 
 
-       fmt.Println("a = ", a, ", b = ", b)
+    fmt.Println("a =", a, ", b =", b)
 }
