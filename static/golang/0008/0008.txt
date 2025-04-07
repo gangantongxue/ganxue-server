@@ -1,0 +1,15 @@
+package main
+
+import "fmt"
+
+func UserCode() {
+	var l, s int // l切片长度，s切片中元素的和
+	// 定义一个长度为3，容量为5的int型切片
+
+	// 利用循环和`fmt.Scan()`函数从键盘输入4个值，存在切片中
+
+	// 计算切片长度以及切片中元素的和
+
+	// 输出
+	fmt.Println("length:", l, "sum:", s)
+}
