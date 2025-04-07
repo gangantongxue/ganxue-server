@@ -8,6 +8,7 @@ import (
 	"ganxue-server/utils/db/mongodb"
 	"ganxue-server/utils/log"
 	"go.mongodb.org/mongo-driver/bson"
+	"gopkg.in/yaml.v3"
 	"io/fs"
 	"os"
 	"path/filepath"
@@ -42,6 +43,15 @@ func Init() {
 			}
 		}
 	}
+
+	catalogueFile, err := os.ReadFile("./static/catalogue.yaml")
+	if err != nil {
+		log.Panic("read catalogue.yaml fail", err)
+	}
+	if err := yaml.Unmarshal(catalogueFile, &global.CATALOGUE); err != nil {
+		log.Panic("unmarshal catalogue.yaml fail", err)
+	}
+
 }
 
 // getAllFilesRecursive 获取所有文件

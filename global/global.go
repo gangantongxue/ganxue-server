@@ -3,6 +3,7 @@ package global
 import (
 	"context"
 	"ganxue-server/config"
+	"ganxue-server/model/catalogue_model"
 	"github.com/go-redis/redis/v8"
 	"github.com/robfig/cron/v3"
 	"github.com/spf13/viper"
@@ -23,6 +24,7 @@ var (
 	GO_ANSWER      *mongo.Collection
 	GROUP          singleflight.Group
 	RUN_CODE_MUTEX sync.Mutex
+	CATALOGUE      catalogue_model.CatalogueModel
 )
 
 var (

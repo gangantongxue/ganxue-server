@@ -12,7 +12,7 @@ func Routers() *server.Hertz {
 	h := server.New(server.WithHostPorts(":8080"))
 
 	c := cors.New(cors.Config{
-		AllowOrigins:     []string{"http://127.0.0.1:5500"},
+		AllowOrigins:     []string{"http://127.0.0.1:5500", "http://115.190.92.245:80", "http://127.0.0.1:80"},
 		AllowMethods:     []string{http.MethodGet, http.MethodPost, http.MethodPut, http.MethodDelete, http.MethodOptions},
 		AllowHeaders:     []string{"Origin", "Content-Length", "Content-Type", "Accept", "Authorization"},
 		AllowCredentials: true,
