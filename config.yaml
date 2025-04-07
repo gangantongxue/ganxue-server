@@ -17,4 +17,4 @@ email:
   host: smtp.163.com
   port: 465
   username: "MC18291255035@163.com"
-  password: "GBqmWW3z7yJHGNxL"
+  password: ${EMAIL_PASSWORD}

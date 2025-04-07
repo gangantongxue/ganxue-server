@@ -27,7 +27,7 @@ func UserInfo() app.HandlerFunc {
 
 		if user.UserInfo.UpdatedAt.After(todayStart) || user.UserInfo.UpdatedAt.Equal(todayStart) {
 			// today
-		} else if user.UserInfo.UpdatedAt.After(yesterdayStart) || user.UserInfo.UpdatedAt.Equal(yesterdayStart) {
+		} else if user.UserInfo.UpdatedAt.IsZero() || user.UserInfo.UpdatedAt.After(yesterdayStart) || user.UserInfo.UpdatedAt.Equal(yesterdayStart) {
 			// yesterday
 			user.UserInfo.StreakDays++
 			user.UserInfo.TotalDays++
