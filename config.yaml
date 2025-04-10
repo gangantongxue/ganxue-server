@@ -13,8 +13,8 @@ mongo:
   port: 27017
   database: ganxue_server
 email:
-  from: "MC18291255035@163.com"
+  from: "ganxue2025@163.com"
   host: smtp.163.com
   port: 465
-  username: "MC18291255035@163.com"
+  username: "ganxue2025@163.com"
   password: ${EMAIL_PASSWORD}

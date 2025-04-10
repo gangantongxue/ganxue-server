@@ -3,6 +3,9 @@
 ## 项目概述
 Ganxue Server 是一个专为Golang学习打造的网页后端项目，集成了丰富的功能，如用户认证、代码运行和文档管理等。该项目采用Go语言开发，结合了多种数据库（MySQL、Redis、MongoDB），使用Hertz作为HTTP框架，具备完善的日志记录和配置管理机制，为Golang学习提供了一个稳定且功能强大的后端支持。
 
+## 网页地址
+[敢学](https://ganxue.com)
+
 ## 前端项目
 [Ganxue Web](https://github.com/gangantongxue/ganxue-web)
 
