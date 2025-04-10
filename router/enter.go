@@ -12,8 +12,8 @@ var (
 )
 
 func Init(h *server.Hertz) {
-	AuthGroup = h.Group("/auth", middleware.JwtMiddleware())
-	OpenGroup = h.Group("/open")
+	AuthGroup = h.Group("/api/auth", middleware.JwtMiddleware())
+	OpenGroup = h.Group("/api/open")
 
 	OpenRouter()
 	AuthRouter()
