@@ -1,0 +1,15 @@
+package main
+
+import "fmt"
+
+// 定义学生结构体Student
+
+func UserCode() {
+	// 创建一个Student类型的变量S
+
+	// 从键盘读取学生信息
+	fmt.Scan(&S.ID, &S.Name,&S.Major, &S.Age)
+
+	// 输出学生信息
+	fmt.Printf("ID: %s\nName: %s\nMajor: %s\nAge: %d\n", , , , )
+}

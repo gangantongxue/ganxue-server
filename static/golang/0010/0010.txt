@@ -1,0 +1,31 @@
+package main
+
+import "fmt"
+
+// 定义一个学生类型Student，包含学号(string)、姓名(string)和成绩(int)。
+
+
+// 定义一个方法，录入学生成绩。`EnterScore(score int)`
+
+
+// 定义一个方法，判断学生是否及格。`IsPassed()bool`
+// 成绩大于60分及格，返回true，否则返回false。
+
+// 定义一个方法，打印学生信息。`Print()`
+// 输出格式为"ID: 001 Name: gangan Score: 80\n"
+
+
+func UserCode {
+	s := Student {
+		ID: "001",
+		Name: "gangan",
+		Score: 0,
+	}
+	s.EnterScore(80)
+	if s.IsPassed() {
+		fmt.Println("Passed")
+	}else {
+		fmt.Println("Not Passed")
+	}
+	s.Print()
+}
