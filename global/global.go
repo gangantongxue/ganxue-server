@@ -20,8 +20,8 @@ var (
 	DB             *gorm.DB
 	CRON           *cron.Cron
 	MDB            *mongo.Database
-	GO_MD          *mongo.Collection
-	GO_ANSWER      *mongo.Collection
+	MD             *mongo.Collection
+	ANSWER         *mongo.Collection
 	GROUP          singleflight.Group
 	RUN_CODE_MUTEX sync.Mutex
 	CATALOGUE      catalogue_model.CatalogueModel

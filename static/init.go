@@ -27,18 +27,37 @@ func Init() {
 		log.Error("获取文件失败", err)
 	}
 	for _, file := range golang {
-		if err := getFileContent(&data, file, "golang"); err != nil {
+		if err := getFileContent(&data, file); err != nil {
 			log.Error("获取文件内容失败", err)
 		}
 	}
+	c, err := getAllFilesRecursive("./static/C/")
+	if err != nil {
+		log.Error("获取文件失败", err)
+	}
+	for _, file := range c {
+		if err := getFileContent(&data, file); err != nil {
+			log.Error("获取文件内容失败", err)
+		}
+	}
+	cpp, err := getAllFilesRecursive("./static/Cpp/")
+	if err != nil {
+		log.Error("获取文件失败", err)
+	}
+	for _, file := range cpp {
+		if err := getFileContent(&data, file); err != nil {
+			log.Error("获取文件内容失败", err)
+		}
+	}
+
 	for _, v := range data {
 		if v.M.ID != "" {
-			if err := mongodb.Update(global.GO_MD, bson.M{"id": v.M.ID}, bson.M{"$set": v.M}, true); err != nil {
+			if err := mongodb.Update(global.MD, bson.M{"id": v.M.ID}, bson.M{"$set": v.M}, true); err != nil {
 				log.Error("插入数据库失败", err)
 			}
 		}
 		if v.A.ID != "" {
-			if err := mongodb.Update(global.GO_ANSWER, bson.M{"id": v.A.ID}, bson.M{"$set": v.A}, true); err != nil {
+			if err := mongodb.Update(global.ANSWER, bson.M{"id": v.A.ID}, bson.M{"$set": v.A}, true); err != nil {
 				log.Error("插入数据库失败", err)
 			}
 		}
@@ -73,7 +92,7 @@ func getAllFilesRecursive(root string) ([]string, error) {
 }
 
 // getFileContent 获取文件内容
-func getFileContent(data *Static, path string, group string) error {
+func getFileContent(data *Static, path string) error {
 	name, ext := fileType(path)
 	val, err := os.ReadFile(path)
 	if err != nil {

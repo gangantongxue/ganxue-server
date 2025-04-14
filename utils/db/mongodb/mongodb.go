@@ -25,8 +25,8 @@ func Init() {
 		os.Exit(1)
 	}
 	global.MDB = client.Database(global.CONFIG.Mongo.Database)
-	global.GO_MD = global.MDB.Collection("go-markdown")
-	global.GO_ANSWER = global.MDB.Collection("go-answer")
+	global.MD = global.MDB.Collection("markdown")
+	global.ANSWER = global.MDB.Collection("answer")
 }
 
 func Close() {
