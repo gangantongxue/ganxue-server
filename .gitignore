@@ -4,3 +4,4 @@
 .gitignore
 .git/
 utils/log/log_file/*
+static/download/*
