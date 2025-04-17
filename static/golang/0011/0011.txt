@@ -1,0 +1,10 @@
+package main
+
+import "fmt"
+
+func UserCode() {
+	a, b := 2, 3
+	/*************调用函数f*******************/
+
+	fmt.Println("a =", a, "b =", b)
+}
