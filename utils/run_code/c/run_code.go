@@ -1,11 +1,13 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	seccomp "github.com/seccomp/libseccomp-golang"
 	"os"
 	"os/exec"
 	"syscall"
+	"time"
 )
 
 func main() {
@@ -95,7 +97,10 @@ func main() {
 		os.Exit(1)
 	}
 
-	cmd := exec.Command("/home/ganxue-server/utils/run_code/c/user_code")
+	timeoutCTX, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	cmd := exec.CommandContext(timeoutCTX, "/home/ganxue-server/utils/run_code/c/user_code")
 	cmd.SysProcAttr = &syscall.SysProcAttr{
 		Cloneflags: syscall.CLONE_VM, // 允许共享内存空间
 		Ptrace:     false,
