@@ -97,9 +97,8 @@ func main() {
 
 	cmd := exec.Command("/home/ganxue-server/utils/run_code/cpp/user_code")
 	cmd.SysProcAttr = &syscall.SysProcAttr{
-		Cloneflags:   syscall.CLONE_VM, // 允许共享内存空间
-		Ptrace:       false,
-		Unshareflags: syscall.CLONE_NEWPID,
+		Cloneflags: syscall.CLONE_VM, // 允许共享内存空间
+		Ptrace:     false,
 	}
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
