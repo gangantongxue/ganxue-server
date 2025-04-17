@@ -40,7 +40,7 @@ func RunCode() app.HandlerFunc {
 			defer global.RUN_CODE_MUTEX.Unlock()
 
 			// 将用户代码写入文件中
-			if err := os.WriteFile("/home/ganxue-server/utils/run_code/user_code.go", []byte(userCode.Code), 0644); err != nil {
+			if err := os.WriteFile("/home/ganxue-server/utils/run_code/go/user_code.go", []byte(userCode.Code), 0644); err != nil {
 				ctx.JSON(500, map[string]string{"message": "写入文件失败"})
 				return
 			}
@@ -49,7 +49,7 @@ func RunCode() app.HandlerFunc {
 			defer cancel()
 
 			// 执行用户代码
-			cmd := exec.CommandContext(timeoutCTX, "go", "run", "/home/ganxue-server/utils/run_code/.")
+			cmd := exec.CommandContext(timeoutCTX, "go", "run", "/home/ganxue-server/utils/run_code/go/.")
 			// 交互式输入
 			stdin, err := cmd.StdinPipe()
 			if err != nil {
@@ -100,7 +100,7 @@ func RunCode() app.HandlerFunc {
 			if actualOut != ans.Output {
 				ctx.JSON(206, map[string]string{
 					"message": "结果错误",
-					"data":    actualOut,
+					"data":    "input:" + ans.Input + "\n" + actualOut,
 				})
 				return
 			} else {
@@ -109,11 +109,167 @@ func RunCode() app.HandlerFunc {
 					"data":    actualOut,
 				})
 			}
-		case '1', '2':
-			ctx.JSON(200, map[string]string{
-				"message": "暂未开放",
-				"data":    "暂未开放\ninput:\n" + ans.Input + "\noutput:\n" + ans.Output,
-			})
+		case '1':
+			global.RUN_CODE_MUTEX.Lock()
+			defer global.RUN_CODE_MUTEX.Unlock()
+
+			// 将用户代码写入文件中
+			if err := os.WriteFile("/home/ganxue-server/utils/run_code/c/user_code.c", []byte(userCode.Code), 0755); err != nil {
+				ctx.JSON(500, map[string]string{"message": "写入文件失败"})
+				return
+			}
+
+			// 编译用户代码
+			if err := exec.Command("gcc", "-o", "/home/ganxue-server/utils/run_code/c/user_code", "/home/ganxue-server/utils/run_code/c/user_code.c").Run(); err != nil {
+				ctx.JSON(500, map[string]string{"message": "编译用户代码失败"})
+				return
+			}
+
+			timeoutCTX, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+			defer cancel()
+
+			// 执行用户代码
+			cmd := exec.CommandContext(timeoutCTX, "go", "run", "/home/ganxue-server/utils/run_code/c/run_code.go")
+			// 交互式输入
+			stdin, err := cmd.StdinPipe()
+			if err != nil {
+				ctx.JSON(500, map[string]string{"message": "创建stdin失败"})
+				return
+			}
+
+			var stdout, stderr bytes.Buffer
+			cmd.Stdout = &stdout
+			cmd.Stderr = &stderr
+
+			if err := cmd.Start(); err != nil {
+				ctx.JSON(500, map[string]string{"message": "执行用户代码失败"})
+				return
+			}
+			if _, err := stdin.Write([]byte(ans.Input)); err != nil {
+				ctx.JSON(500, map[string]string{"message": "写入标准输入失败"})
+				return
+			}
+			if err := stdin.Close(); err != nil {
+				ctx.JSON(500, map[string]string{"message": "关闭标准输入失败"})
+				return
+			}
+
+			if err := cmd.Wait(); err != nil {
+				if errors.Is(timeoutCTX.Err(), context.DeadlineExceeded) {
+					ctx.JSON(206, map[string]string{
+						"message": "执行超时",
+						"data":    stderr.String() + "\n" + err.Error(),
+					})
+					return
+				}
+				ctx.JSON(206, map[string]string{
+					"message": "执行出错",
+					"data":    stderr.String() + "\n" + err.Error(),
+				})
+				return
+			}
+
+			actualOut := stdout.String()
+			if stderr.String() != "" {
+				ctx.JSON(206, map[string]string{
+					"message": "执行出错",
+					"error":   stderr.String(),
+				})
+				return
+			}
+			if actualOut != ans.Output {
+				ctx.JSON(206, map[string]string{
+					"message": "结果错误",
+					"data":    "input:" + ans.Input + "\n" + actualOut,
+				})
+				return
+			} else {
+				ctx.JSON(200, map[string]string{
+					"message": "运行成功",
+					"data":    actualOut,
+				})
+			}
+
+		case '2':
+			global.RUN_CODE_MUTEX.Lock()
+			defer global.RUN_CODE_MUTEX.Unlock()
+
+			// 将用户代码写入文件中
+			if err := os.WriteFile("/home/ganxue-server/utils/run_code/cpp/user_code.cpp", []byte(userCode.Code), 0755); err != nil {
+				ctx.JSON(500, map[string]string{"message": "写入文件失败"})
+				return
+			}
+
+			// 编译用户代码
+			if err := exec.Command("g++", "-o", "/home/ganxue-server/utils/run_code/cpp/user_code", "/home/ganxue-server/utils/run_code/cpp/user_code.cpp").Run(); err != nil {
+				ctx.JSON(500, map[string]string{"message": "编译用户代码失败"})
+				return
+			}
+
+			timeoutCTX, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+			defer cancel()
+
+			// 执行用户代码
+			cmd := exec.CommandContext(timeoutCTX, "go", "run", "/home/ganxue-server/utils/run_code/cpp/run_code.go")
+			// 交互式输入
+			stdin, err := cmd.StdinPipe()
+			if err != nil {
+				ctx.JSON(500, map[string]string{"message": "创建stdin失败"})
+				return
+			}
+
+			var stdout, stderr bytes.Buffer
+			cmd.Stdout = &stdout
+			cmd.Stderr = &stderr
+
+			if err := cmd.Start(); err != nil {
+				ctx.JSON(500, map[string]string{"message": "执行用户代码失败"})
+				return
+			}
+			if _, err := stdin.Write([]byte(ans.Input)); err != nil {
+				ctx.JSON(500, map[string]string{"message": "写入标准输入失败"})
+				return
+			}
+			if err := stdin.Close(); err != nil {
+				ctx.JSON(500, map[string]string{"message": "关闭标准输入失败"})
+				return
+			}
+
+			if err := cmd.Wait(); err != nil {
+				if errors.Is(timeoutCTX.Err(), context.DeadlineExceeded) {
+					ctx.JSON(206, map[string]string{
+						"message": "执行超时",
+						"data":    stderr.String() + "\n" + err.Error(),
+					})
+					return
+				}
+				ctx.JSON(206, map[string]string{
+					"message": "执行出错",
+					"data":    stderr.String() + "\n" + err.Error(),
+				})
+				return
+			}
+
+			actualOut := stdout.String()
+			if stderr.String() != "" {
+				ctx.JSON(206, map[string]string{
+					"message": "执行出错",
+					"error":   stderr.String(),
+				})
+				return
+			}
+			if actualOut != ans.Output {
+				ctx.JSON(206, map[string]string{
+					"message": "结果错误",
+					"data":    "input:" + ans.Input + "\n" + actualOut,
+				})
+				return
+			} else {
+				ctx.JSON(200, map[string]string{
+					"message": "运行成功",
+					"data":    actualOut,
+				})
+			}
 		}
 
 	}
