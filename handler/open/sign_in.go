@@ -50,7 +50,7 @@ func SignIn() app.HandlerFunc {
 			"long_token",
 			longToken,
 			60*60*24*7,
-			"/open/refresh",
+			"/api/open/refresh",
 			"",
 			protocol.CookieSameSiteNoneMode,
 			false,
