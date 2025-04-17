@@ -11,6 +11,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"os"
 	"os/exec"
+	"syscall"
 	"time"
 )
 
@@ -50,6 +51,9 @@ func RunCode() app.HandlerFunc {
 
 			// 执行用户代码
 			cmd := exec.CommandContext(timeoutCTX, "go", "run", "/home/ganxue-server/utils/run_code/go/.")
+			cmd.SysProcAttr = &syscall.SysProcAttr{
+				Setpgid: true,
+			}
 			// 交互式输入
 			stdin, err := cmd.StdinPipe()
 			if err != nil {
@@ -76,6 +80,10 @@ func RunCode() app.HandlerFunc {
 
 			if err := cmd.Wait(); err != nil {
 				if errors.Is(timeoutCTX.Err(), context.DeadlineExceeded) {
+					if err := syscall.Kill(-cmd.Process.Pid, syscall.SIGKILL); err != nil {
+						ctx.JSON(500, map[string]string{"message": "kill进程组失败"})
+						return
+					}
 					ctx.JSON(206, map[string]string{
 						"message": "执行超时",
 						"data":    stderr.String() + "\n" + err.Error(),
@@ -130,6 +138,9 @@ func RunCode() app.HandlerFunc {
 
 			// 执行用户代码
 			cmd := exec.CommandContext(timeoutCTX, "go", "run", "/home/ganxue-server/utils/run_code/c/run_code.go")
+			cmd.SysProcAttr = &syscall.SysProcAttr{
+				Setpgid: true,
+			}
 			// 交互式输入
 			stdin, err := cmd.StdinPipe()
 			if err != nil {
@@ -156,6 +167,10 @@ func RunCode() app.HandlerFunc {
 
 			if err := cmd.Wait(); err != nil {
 				if errors.Is(timeoutCTX.Err(), context.DeadlineExceeded) {
+					if err := syscall.Kill(-cmd.Process.Pid, syscall.SIGKILL); err != nil {
+						ctx.JSON(500, map[string]string{"message": "kill进程组失败"})
+						return
+					}
 					ctx.JSON(206, map[string]string{
 						"message": "执行超时",
 						"data":    stderr.String() + "\n" + err.Error(),
@@ -211,6 +226,9 @@ func RunCode() app.HandlerFunc {
 
 			// 执行用户代码
 			cmd := exec.CommandContext(timeoutCTX, "go", "run", "/home/ganxue-server/utils/run_code/cpp/run_code.go")
+			cmd.SysProcAttr = &syscall.SysProcAttr{
+				Setpgid: true,
+			}
 			// 交互式输入
 			stdin, err := cmd.StdinPipe()
 			if err != nil {
@@ -237,6 +255,10 @@ func RunCode() app.HandlerFunc {
 
 			if err := cmd.Wait(); err != nil {
 				if errors.Is(timeoutCTX.Err(), context.DeadlineExceeded) {
+					if err := syscall.Kill(-cmd.Process.Pid, syscall.SIGKILL); err != nil {
+						ctx.JSON(500, map[string]string{"message": "kill进程组失败"})
+						return
+					}
 					ctx.JSON(206, map[string]string{
 						"message": "执行超时",
 						"data":    stderr.String() + "\n" + err.Error(),
