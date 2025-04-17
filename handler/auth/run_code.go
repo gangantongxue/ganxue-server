@@ -193,6 +193,13 @@ func RunCode() app.HandlerFunc {
 				return
 			}
 			if actualOut != ans.Output {
+				if actualOut == "用户代码执行失败: signal: killed\n" {
+					ctx.JSON(206, map[string]string{
+						"message": "结果错误",
+						"data":    "超时",
+					})
+					return
+				}
 				ctx.JSON(206, map[string]string{
 					"message": "结果错误",
 					"data":    "input:" + ans.Input + "\n" + actualOut,
@@ -281,6 +288,13 @@ func RunCode() app.HandlerFunc {
 				return
 			}
 			if actualOut != ans.Output {
+				if actualOut == "用户代码执行失败: signal: killed\n" {
+					ctx.JSON(206, map[string]string{
+						"message": "结果错误",
+						"data":    "超时",
+					})
+					return
+				}
 				ctx.JSON(206, map[string]string{
 					"message": "结果错误",
 					"data":    "input:" + ans.Input + "\n" + actualOut,
