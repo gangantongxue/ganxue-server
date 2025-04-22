@@ -1,0 +1,13 @@
+#include <stdio.h>
+
+int main() {
+    int a;
+    printf("Please input a number: \n");
+    scanf("%d", &a); // 从键盘输入a的值
+
+    /****************/
+
+    /****************/
+
+    return 0;
+}

@@ -1,0 +1,4 @@
+{
+  "input": "",
+  "output": "Result1: 11, Result2: 16\nx > y: 0\nx < y: 1\nx == y: 0\nx != y: 1\np && q: 0\np || q: 1\n!p: 0\nResult: 17\nm: 6, n: 11\n"
+}

@@ -1,0 +1,15 @@
+#include<stdio.h>
+
+int main() {
+    int a, b;
+    scanf("%d%d", &a, &b);
+
+    // 调用函数f，实现将两数之和(a+b)存于a中，两数之差(a-b)存于b中
+
+
+    printf("a = %d, b = %d\n", a, b);
+
+    return 0;
+}
+
+// 定义函数f，实现将两数之和(a+b)存于a中，两数之差(a-b)存于b中

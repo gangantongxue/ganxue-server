@@ -108,7 +108,7 @@ func RunCode() app.HandlerFunc {
 			if actualOut != ans.Output {
 				ctx.JSON(206, map[string]string{
 					"message": "结果错误",
-					"data":    "input:" + ans.Input + "\n" + actualOut,
+					"data":    "input:\n" + ans.Input + "\noutput:\n" + actualOut,
 				})
 				return
 			} else {
@@ -202,7 +202,7 @@ func RunCode() app.HandlerFunc {
 				}
 				ctx.JSON(206, map[string]string{
 					"message": "结果错误",
-					"data":    "input:" + ans.Input + "\n" + actualOut,
+					"data":    "input:\n" + ans.Input + "\noutput:\n" + actualOut,
 				})
 				return
 			} else {
@@ -297,7 +297,7 @@ func RunCode() app.HandlerFunc {
 				}
 				ctx.JSON(206, map[string]string{
 					"message": "结果错误",
-					"data":    "input:" + ans.Input + "\n" + actualOut,
+					"data":    "input:\n" + ans.Input + "\noutput:\n" + actualOut,
 				})
 				return
 			} else {
