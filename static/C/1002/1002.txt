@@ -1,0 +1,38 @@
+#include <stdio.h>
+
+int main() {
+    //算数表达式
+    int a = 5, b = 3;
+    int result1 = a + b * 2;
+    int result2 = (a + b) * 2;
+    /********************/
+    printf("Result1: %d, Result2: %d\n", , );
+    /********************/
+
+    //关系表达式
+    int x = 10, y = 20;
+    /********************/
+    printf("x > y: %d\n", );
+    printf("x < y: %d\n", );
+    printf("x == y: %d\n", );
+    printf("x != y: %d\n", );
+    /********************/
+
+    //逻辑表达式
+    int p = 1, q = 0;
+    /********************/
+    printf("p && q: %d\n", );
+    printf("p || q: %d\n", );
+    printf("!p: %d\n", );
+    /********************/
+
+    //逗号表达式
+    int m = 5, n = 10;
+    int result = (m++, n++, m + n);
+    /********************/
+    printf("Result: %d\n", );
+    printf("m: %d, n: %d\n", , );
+    /********************/
+
+    return 0;
+}

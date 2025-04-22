@@ -1,0 +1,8 @@
+#include<stdio.h>
+
+int main() {
+    /*请在下方输入你的代码*/
+
+
+    return 0;
+}

@@ -21,7 +21,7 @@ func processLog() {
 	if err != nil {
 		return
 	}
-	filePath := filepath.Join(wd, "utils", "log", "log_file", "logFile")
+	filePath := filepath.Join(wd, "utils", "log", "log_file", "logFile.log")
 	logFile, err = os.OpenFile(filePath, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 	if err != nil {
 		panic(err)
@@ -111,7 +111,7 @@ func sendLogFile() {
 	m.SetHeader("Subject", "日志文件")
 	m.SetBody("text/html", "请查看附件中的日志文件")
 
-	m.Attach("utils/log/log_file/logFile")
+	m.Attach("utils/log/log_file/logFile.log")
 	d := mail.NewDialer(global.CONFIG.Email.Host, global.CONFIG.Email.Port, global.CONFIG.Email.Username, global.CONFIG.Email.Password)
 	d.SSL = true
 	if err := d.DialAndSend(m); err != nil {

@@ -12,10 +12,10 @@ int main()
     printf("Please input your name, age, height, weight, sex :\n");
 
     /*####################*/
-    scanf("%s %d %f %lf %c",name , &age,&height ,&weight ,&sex );
+    scanf("%s %d %f %lf %c", , , , , );
 
     /*####################*/
-    printf("name: %s age: %d height: %.2f weight: %.2lf sex: %c\n",name , age, height,weight ,sex );
+    printf("name: %s age: %d height: %.2f weight: %.2lf sex: %c\n", , , , , );
     
     return 0;
 }

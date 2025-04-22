@@ -1,0 +1,4 @@
+{
+    "input": "gangan\n20\n50.0\n173\nm\n",
+    "output": "Please input your name, age, height, weight, sex :\nname: gangan age: 20 height: 50.00 weight: 173.00 sex: m\n"
+  }

@@ -1,0 +1,14 @@
+#include<stdio.h>
+
+int main() {
+    int a, b, c;
+    scanf("%d%d", &a, &b);
+
+    // 使用add函数计算a，b的和并存入c中
+
+
+    printf("c = %d\n", c)
+    return 0;
+}
+
+// 定义函数add用于计算两数的和并返回
